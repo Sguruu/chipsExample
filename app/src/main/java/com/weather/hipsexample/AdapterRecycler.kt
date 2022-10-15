@@ -46,8 +46,7 @@ class AdapterRecycler(
             }
 
             // перересовка конкретного элемента
-            notifyItemChanged(elementChecked!!)
-            notifyItemChanged(elementCheckedOld!!)
+            redrawing()
         }
 
         elementChecked?.let {
@@ -55,12 +54,21 @@ class AdapterRecycler(
                 holder.cardView != null
             ) {
                 val cellActive = it == holder.adapterPosition
-                callbackElementChecked.invoke(cellActive, holder.textView!!, holder.cardView!!)
+                callbackElementChecked.invoke(
+                    cellActive,
+                    holder.textView!!,
+                    holder.cardView!!
+                )
             }
         }
     }
 
     override fun getItemCount(): Int {
         return list.size
+    }
+
+    private fun redrawing() {
+        notifyItemChanged(elementChecked!!)
+        notifyItemChanged(elementCheckedOld!!)
     }
 }
