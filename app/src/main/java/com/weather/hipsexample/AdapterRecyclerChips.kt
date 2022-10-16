@@ -6,15 +6,17 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.weather.hipsexample.model.Category
 import com.weather.hipsexample.model.ModelChips
 
-class AdapterRecycler(
+class AdapterRecyclerChips(
     private val list: List<ModelChips>,
-    private val callbackElementChecked: (Boolean, TextView, CardView) -> Unit
-) : RecyclerView.Adapter<AdapterRecycler.ViewHolder>() {
+    private val callbackElementChecked: (Boolean, TextView, CardView, Category?) -> Unit
+) : RecyclerView.Adapter<AdapterRecyclerChips.ViewHolder>() {
 
     private var elementChecked: Int? = null
     private var elementCheckedOld: Int? = null
+    private var currentCategory: Category? = null
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var cardView: CardView? = null
@@ -40,6 +42,7 @@ class AdapterRecycler(
                 elementCheckedOld = it
             }
             elementChecked = holder.adapterPosition
+            currentCategory = list[holder.adapterPosition].category
 
             if (elementCheckedOld == null) {
                 elementCheckedOld = elementChecked
@@ -57,7 +60,8 @@ class AdapterRecycler(
                 callbackElementChecked.invoke(
                     cellActive,
                     holder.textView!!,
-                    holder.cardView!!
+                    holder.cardView!!,
+                    if (cellActive) currentCategory else null
                 )
             }
         }
